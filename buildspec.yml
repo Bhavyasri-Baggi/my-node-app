@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing dependencies
+  build:
+    commands:
+      - echo Build started
+  post_build:
+    commands:
+      - echo Deploying to EC2
+      - ssh ec2-user@100.27.206.120 "cd /home/ec2-user/my-app && git pull && npm install && pkill node || true && nohup node index.js > app.log 2>&1 &"
