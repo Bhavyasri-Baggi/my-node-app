@@ -3,11 +3,18 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo Installing dependencies
+      - echo Setting up SSH
+      - mkdir -p ~/.ssh
+      - echo "$EC2_KEY" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - ssh-keyscan -H 100.27.206.120 >> ~/.ssh/known_hosts
+
   build:
     commands:
       - echo Build started
+
   post_build:
     commands:
       - echo Deploying to EC2
-      - ssh -o StrictHostKeyChecking=no ec2-user@100.27.206.120 "cd /home/ec2-user/my-app && git pull && npm install && pkill node || true && nohup node index.js > app.log 2>&1 &"
+      - ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@100.27.206.120 "cd /home/ec2-user/my-app && git pull && npm install && pkill node || true && nohup node index.js > app.log 2>&1 &"
+
