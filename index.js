@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('code pipeline is working fine');
+  res.send('code pipeline');
 });
 
 app.listen(8080, () => {
